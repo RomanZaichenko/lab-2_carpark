@@ -3,10 +3,12 @@ package kpi.lab2.model.dao.jdbc;
 import kpi.lab2.model.dao.CarDao;
 import kpi.lab2.model.entity.Manufacturer;
 import kpi.lab2.model.entity.Car;
+import kpi.lab2.model.dao.exception.DaoException;
 
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 
 public class JdbcCarDao extends JdbcAbstract<Car> implements CarDao {
@@ -102,7 +104,25 @@ public class JdbcCarDao extends JdbcAbstract<Car> implements CarDao {
     }
 
     @Override
-    public List<Car> findByModel(String year) {
+    public List<Car> findByYear(int year) {
         throw new UnsupportedOperationException();
+    }
+
+    public Optional<Car> findByModel(String model) {
+        Optional<Car> result = Optional.empty();
+
+        try(PreparedStatement query =
+                    connection.prepareStatement(SELECT_FROM_CARS + WHERE_MODEL) ){
+            query.setString( 1, model.toLowerCase());
+            ResultSet rs = query.executeQuery();
+            if(rs.next()) {
+                Car car = getEntityFromResultSet(rs);
+                result = Optional.of(car);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+
+        return result;
     }
 }

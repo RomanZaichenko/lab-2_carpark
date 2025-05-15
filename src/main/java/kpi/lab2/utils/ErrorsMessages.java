@@ -9,5 +9,6 @@ public class ErrorsMessages {
 
     public static final String DAO_ERROR = "Error in DAO";
     public static final String SERVICE_ERROR = "Error in service";
+    public static final String SERVICE_ERROR_CAR_EXIST = "Car of this model already exist";
     public static final String NOT_EXCEPTED_ERROR = "Not excepted error. Try do it later";
 }
